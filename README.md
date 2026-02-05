@@ -7,6 +7,7 @@ This is repository adapted the original PyTMatrix code by Jussi Leinonen, which 
 installation of the original code was buggy for `python>3.6`, fully deprecated for `python>3.12` and `numpy>2`.
 
 The code adaptations include:
+
 - Migration from distutils to setuptools (setup.py rewritten)
 - Migration of certain scipy functions to new names
 - Optimization and vectorization of some computations
@@ -17,7 +18,7 @@ The installation instructions in the original pytmatrix library are outdated and
 
 The instructions below describe how to install the **LTE-maintained fork of pyTMatrix**, which is compatible with modern Python interpreters.
 
-**WARNING**:  Installing pyTMatrix directly via `pip install git+https://github.com/ltelab/pytmatrix-lte.git` does not work at this time. We welcome contributions to enable this type of installation !
+**WARNING**: Installing pyTMatrix directly via `pip install git+https://github.com/ltelab/pytmatrix-lte.git` does not work at this time. We welcome contributions to enable this type of installation !
 
 ### 1. Install dependencies
 
@@ -58,4 +59,3 @@ The software should now be installed and ready to use.
 ## Usage
 
 See the [usage instructions](https://github.com/jleinonen/pytmatrix/wiki) in the original wiki.
- 

@@ -19,6 +19,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
+
 import sys
 from datetime import datetime
 
@@ -394,7 +395,9 @@ class PSDIntegrator:
                 calculation (which may take a while). If False (default),
                 run silently.
         """
-        step = (self.D_max - self.D_min) / self.num_points
+        # Define bin centers
+        # NOTE: Old Jussi code used right_side bin edges
+        step = (self.D_max - self.D_min) / self.num_points  # bin width
         self._psd_D = self.D_min + step * (0.5 + np.arange(self.num_points))
 
         self._S_table = {}
@@ -516,7 +519,9 @@ class PSDIntegrator:
         with open(fn, "rb") as f:
             data = pickle.load(f)
 
-        if ("tmatrix_version" not in data) or (data["tmatrix_version"] != tmatrix_aux.VERSION):
+        if ("tmatrix_version" not in data) or (
+            data["tmatrix_version"] != tmatrix_aux.VERSION
+        ):
             warnings.warn("Loading data saved with another version.", Warning)
 
         (

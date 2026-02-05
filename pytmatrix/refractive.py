@@ -62,6 +62,7 @@ m_w_20C = {
 # Ice density in g/cm^3
 ice_density = 0.9167
 
+
 def mg_refractive(m, mix):
     """Maxwell-Garnett EMA for the refractive index.
 
