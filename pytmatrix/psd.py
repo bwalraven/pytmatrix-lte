@@ -282,6 +282,9 @@ class PSDIntegrator:
         axis_ratio_func: set to a callable object giving the aspect ratio
             (horizontal to rotational) as a function of diameter, or None to
             use the "axis_ratio" attribute for all sizes; default None
+        D_min: set to the minimum single scatterer size that is desired to be
+            used (usually the D_min corresponding to the smallest PSD you
+            intend to use)
         D_max: set to the maximum single scatterer size that is desired to be
             used (usually the D_max corresponding to the largest PSD you
             intend to use)
@@ -290,12 +293,13 @@ class PSDIntegrator:
             default horizontal backscatter
     """
 
-    attrs = {"num_points", "m_func", "axis_ratio_func", "D_max", "geometries"}
+    attrs = {"num_points", "m_func", "axis_ratio_func", "D_min", "D_max", "geometries"}
 
     def __init__(self, **kwargs):
         self.num_points = 1024
         self.m_func = None
         self.axis_ratio_func = None
+        self.D_min = 0
         self.D_max = None
         self.geometries = (tmatrix_aux.geom_horiz_back,)
 
@@ -375,7 +379,7 @@ class PSDIntegrator:
 
         Initialize the scattering lookup tables for the different geometries.
         Before calling this, the following attributes must be set:
-           num_points, m_func, axis_ratio_func, D_max, geometries
+           num_points, m_func, axis_ratio_func, D_min (default is 0), D_max, geometries
         and additionally, all the desired attributes of the Scatterer class
         (e.g. wavelength, aspect ratio).
 
@@ -390,9 +394,8 @@ class PSDIntegrator:
                 calculation (which may take a while). If False (default),
                 run silently.
         """
-        self._psd_D = np.linspace(
-            self.D_max / self.num_points, self.D_max, self.num_points
-        )
+        step = (self.D_max - self.D_min) / self.num_points
+        self._psd_D = self.D_min + step * (0.5 + np.arange(self.num_points))
 
         self._S_table = {}
         self._Z_table = {}
@@ -486,6 +489,7 @@ class PSDIntegrator:
             "time": datetime.now(),
             "psd_scatter": (
                 self.num_points,
+                self.D_min,
                 self.D_max,
                 self._psd_D,
                 self._S_table,
@@ -517,6 +521,7 @@ class PSDIntegrator:
 
         (
             self.num_points,
+            self.D_min,
             self.D_max,
             self._psd_D,
             self._S_table,
